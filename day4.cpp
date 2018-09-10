@@ -8,6 +8,29 @@
 
 using namespace std;
 
+bool is_anagram(string const & a, string const & b)
+{
+  if(a.size() != b.size())
+    return false;
+
+  vector<char> a_letters;
+  for(auto letter: a)
+    a_letters.push_back(letter);
+
+  vector<char> b_letters;
+  for(auto letter: b)
+    b_letters.push_back(letter);
+
+  sort(a_letters.begin(), a_letters.end());
+  sort(b_letters.begin(), b_letters.end());
+
+  for(size_t i = 0; i < a_letters.size(); i++)
+    if(a_letters[i] != b_letters[i])
+      return false;
+  
+  return true;
+}
+
 vector<string> split(string const & sentence)
 {
   istringstream ss(sentence);
@@ -28,13 +51,23 @@ bool contains_duplicates(vector<string> const & words)
   return false;
 }
 
+bool contains_anagrams(vector<string> const & words)
+{
+  for(auto w = words.begin(); w != words.end(); w++)
+    for(auto w2 = w+1; w2 != words.end(); w2++)
+      if(is_anagram(*w, *w2))
+	return true;
+
+  return false;
+}
+
 bool is_valid_passphrase(string const & s)
 {
   auto words = split(s);
   if(words.size() < 2)
     return false;
 
-  if (contains_duplicates(words))
+  if (contains_anagrams(words))
     return false;
 
   return true;
@@ -48,12 +81,7 @@ int main()
   int valid_passphrase = 0;
   while(getline(mdp_file, line))
     if(is_valid_passphrase(line))
-    {
       valid_passphrase++;
-      cout << "phrase: " << line << endl;
-    }
-
-  cout << valid_passphrase << endl;
 
   assert(!is_valid_passphrase(""));
   assert(!is_valid_passphrase("toto"));
@@ -68,6 +96,15 @@ int main()
   assert(contains_duplicates({"tata", "toto", "tata"}));
   assert(contains_duplicates({"toto", "tata", "tata"}));
   assert(!contains_duplicates({"aa", "bb", "cc", "aaa"}));
+
+  assert(is_anagram("toto", "toto"));
+  assert(!is_anagram("toto", ""));
+  assert(is_anagram("toto", "otot"));
+  assert(!is_anagram("toto", "ototo"));
+  assert(is_anagram("tota", "atot"));
+  assert(!is_anagram("tota", "atat"));
+
+  cout << valid_passphrase << endl;
 
   return 0;
 }
