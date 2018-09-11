@@ -13,13 +13,8 @@ bool is_anagram(string const & a, string const & b)
   if(a.size() != b.size())
     return false;
 
-  vector<char> a_letters;
-  for(auto letter: a)
-    a_letters.push_back(letter);
-
-  vector<char> b_letters;
-  for(auto letter: b)
-    b_letters.push_back(letter);
+  vector<char> a_letters(a.begin(), a.end());
+  vector<char> b_letters(b.begin(), b.end());
 
   sort(a_letters.begin(), a_letters.end());
   sort(b_letters.begin(), b_letters.end());
