@@ -37,8 +37,9 @@ int communism(Banks const & banks_)
   {
     steps++;
     update_banks(banks);
-    if(find(previous_banks.begin(), previous_banks.end(), banks) != end(previous_banks))
-      return steps;
+    auto found = find(previous_banks.begin(), previous_banks.end(), banks);
+    if(found != end(previous_banks))
+      return distance(found, end(previous_banks));
 
     previous_banks.push_back(banks);
   }
@@ -68,7 +69,7 @@ int main()
     assert(b == Banks({ 0, 2, 3, 4}));
   }
 
-  assert(communism({0, 2, 7, 0}) == 5);
+  assert(communism({0, 2, 7, 0}) == 4);
   cout << communism({ 0, 5, 10, 0, 11, 14, 13, 4, 11, 8, 8, 7, 1, 4, 12, 11}) << endl;
   return 0;
 }
